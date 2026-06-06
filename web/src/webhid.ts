@@ -252,8 +252,19 @@ export async function readFromKeyboard(
     const tdCount = res[0];
     const comboCount = res[1];
 
-    // 4. レイアウト情報 (10レイヤー × 8行 × 7列) の読み出し
-    const layersCount = 10;
+    // 3.5. レイヤー数の動的取得
+    if (onProgress) onProgress("レイヤー数取得中...");
+    let layersCount = 4; // デフォルトのフォールバック値
+    try {
+      const layerCountRes = await sendCommand(device, [HID_CONSTANTS.CMD_VIA_GET_LAYER_COUNT]);
+      if (layerCountRes[0] === HID_CONSTANTS.CMD_VIA_GET_LAYER_COUNT && layerCountRes[1] > 0 && layerCountRes[1] <= 16) {
+        layersCount = layerCountRes[1];
+      }
+    } catch (e) {
+      console.warn("レイヤー数取得コマンド失敗。デフォルト値(4)を使用します。", e);
+    }
+
+    // 4. レイアウト情報の読み出し
     const rowsCount = 8;
     const colsCount = 7;
     const rawLayout: (string | number)[][][] = [];

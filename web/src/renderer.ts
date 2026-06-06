@@ -194,11 +194,12 @@ export function renderKeyboardData(data: VialKeyboardData): void {
     });
   });
 
-  // 2. キーマップレイアウトの描画 (3つのレイヤー: 0, 1, 2)
+  // 2. キーマップレイアウトの描画 (動的レイヤー描画)
   const layoutContainer = document.getElementById('layout-container');
   if (layoutContainer) {
     layoutContainer.innerHTML = '';
-    const layersToRender = [0, 1, 2];
+    const layersCount = data.layout.length;
+    const layersToRender = Array.from({ length: layersCount }, (_, i) => i);
 
     layersToRender.forEach(lIdx => {
       const leftKeysHTML = LEFT_KEYS.map(k => renderKeycap(lIdx, k, 'left', data.layout[lIdx], data.tapDance, comboInputKeys)).join('');
@@ -402,7 +403,7 @@ export function renderKeyboardData(data: VialKeyboardData): void {
   const encoderTableBody = document.getElementById('table-encoders-body');
   if (encoderSection && encoderTableBody) {
     encoderTableBody.innerHTML = '';
-    const numLayers = Math.min(3, data.encoderLayout.length); // Layer 0, 1, 2を表示
+    const numLayers = data.encoderLayout.length; // 全てのレイヤーを表示
 
     if (data.encoderLayout.length > 0) {
       encoderSection.style.display = 'block';
