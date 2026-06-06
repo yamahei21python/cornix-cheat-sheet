@@ -982,4 +982,13 @@ footer {
     border: 1px solid #a8dab5 !important;
     box-shadow: none !important;
   }
+
+  /* 印刷用のエンコーダー丸型キーのシャドウとインジケータードットの無効化 */
+  .keycap.encoder-knob {
+    box-shadow: none !important;
+  }
+
+  .keycap.encoder-knob::before {
+    display: none !important;
+  }
 }
