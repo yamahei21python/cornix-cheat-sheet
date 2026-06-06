@@ -983,9 +983,11 @@ footer {
     box-shadow: none !important;
   }
 
-  /* 印刷用のエンコーダー丸型キーのシャドウとインジケータードットの無効化 */
+  /* 印刷用のエンコーダー丸型キーのシャドウとインジケータードットの無効化、および文字中央配置 */
   .keycap.encoder-knob {
     box-shadow: none !important;
+    justify-content: center !important;
+    padding-top: 0 !important;
   }
 
   .keycap.encoder-knob::before {
