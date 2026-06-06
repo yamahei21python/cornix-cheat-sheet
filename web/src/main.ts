@@ -134,6 +134,7 @@ if (dropZone && fileInput) {
 if (btnConnect) {
   btnConnect.addEventListener('click', async () => {
     try {
+      btnConnect.disabled = true;
       updateStatus("キーボードへの接続を要求中...", true);
       const device = await connectKeyboard();
       
@@ -174,6 +175,8 @@ if (btnConnect) {
       }
       
       updateStatus(errorMsg, false, true);
+    } finally {
+      btnConnect.disabled = false;
     }
   });
 }
