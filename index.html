@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornix Layout Cheat Sheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --title-color: #0f172a;
+            
+            --key-size: 21px;
+            --key-gap: 3px;
+            
+            /* Category Colors (Gorgeous HSL Palette) */
+            --cat-alphabet-bg: #ffffff;
+            --cat-alphabet-text: #1e293b;
+            --cat-alphabet-border: #cbd5e1;
+            
+            --cat-modifier-bg: #f1f5f9;
+            --cat-modifier-text: #475569;
+            --cat-modifier-border: #cbd5e1;
+            
+            --cat-layer-bg: #f0fdf4;
+            --cat-layer-text: #166534;
+            --cat-layer-border: #bbf7d0;
+            
+            --cat-nav-bg: #fff7ed;
+            --cat-nav-text: #c2410c;
+            --cat-nav-border: #fed7aa;
+            
+            --cat-custom-bg: #fef2f2;
+            --cat-custom-text: #991b1b;
+            --cat-custom-border: #fecaca;
+            
+            --cat-mouse-bg: #faf5ff;
+            --cat-mouse-text: #6b21a8;
+            --cat-mouse-border: #e9d5ff;
+            
+            --cat-numpad-bg: #fefce8;
+            --cat-numpad-text: #854d0e;
+            --cat-numpad-border: #fef08a;
+            
+            --cat-function-bg: #f0f9ff;
+            --cat-function-text: #075985;
+            --cat-function-border: #bae6fd;
+            
+            --cat-transparent-bg: rgba(255, 255, 255, 0.4);
+            --cat-transparent-text: #94a3b8;
+            --cat-transparent-border: #cbd5e1;
+        }
+
+        @page {
+            size: A4 landscape;
+            margin: 6mm 8mm;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.3;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 4px;
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--title-color);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        header .meta {
+            font-size: 9px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Keyboard layouts section */
+        .layers-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .layer-section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .layer-title {
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--title-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+            text-align: center;
+        }
+
+        .keyboard-layout {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 4px 0 16px 0;
+        }
+
+        .keyboard-half {
+            position: relative;
+            width: calc(7.6 * var(--key-size));
+            height: calc(5.0 * var(--key-size));
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
+            border: 1px solid #cbd5e1;
+            box-sizing: border-box;
+        }
+
+        .key-cell {
+            position: absolute;
+            width: var(--key-size);
+            height: var(--key-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .keycap {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            font-size: 7px;
+            font-weight: 600;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            user-select: none;
+        }
+
+        .keycap:hover {
+            transform: translateY(-1.5px) scale(1.03);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            z-index: 10;
+        }
+
+        .keycap .main-label {
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .keycap .sub-label {
+            position: absolute;
+            bottom: 1.5px;
+            right: 2px;
+            font-size: 4px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .keycap .top-sub-label {
+            position: absolute;
+            top: 1.5px;
+            left: 2px;
+            font-size: 4.5px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .keycap .combo-mark {
+            position: absolute;
+            top: 1.5px;
+            right: 2px;
+            font-size: 5px;
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        /* Categories color classes */
+        .cat-alphabet {
+            background-color: var(--cat-alphabet-bg);
+            color: var(--cat-alphabet-text);
+            border: 1px solid var(--cat-alphabet-border);
+        }
+
+        .cat-modifier {
+            background-color: var(--cat-modifier-bg);
+            color: var(--cat-modifier-text);
+            border: 1px solid var(--cat-modifier-border);
+        }
+
+        .cat-layer {
+            background-color: var(--cat-layer-bg);
+            color: var(--cat-layer-text);
+            border: 1px solid var(--cat-layer-border);
+        }
+
+        .cat-nav {
+            background-color: var(--cat-nav-bg);
+            color: var(--cat-nav-text);
+            border: 1px solid var(--cat-nav-border);
+        }
+
+        .cat-custom {
+            background-color: var(--cat-custom-bg);
+            color: var(--cat-custom-text);
+            border: 1.5px solid var(--cat-custom-border);
+        }
+
+        .cat-mouse {
+            background-color: var(--cat-mouse-bg);
+            color: var(--cat-mouse-text);
+            border: 1px solid var(--cat-mouse-border);
+        }
+
+        .cat-numpad {
+            background-color: var(--cat-numpad-bg);
+            color: var(--cat-numpad-text);
+            border: 1px solid var(--cat-numpad-border);
+        }
+
+        .cat-function {
+            background-color: var(--cat-function-bg);
+            color: var(--cat-function-text);
+            border: 1px solid var(--cat-function-border);
+        }
+
+        .cat-transparent {
+            background-color: var(--cat-transparent-bg);
+            color: var(--cat-transparent-text);
+            border: 1px dashed var(--cat-transparent-border);
+            box-shadow: none;
+        }
+
+        /* Bottom informational area */
+        .bottom-area {
+            display: grid;
+            grid-template-columns: 1.2fr 1.6fr 1.6fr 1fr;
+            gap: 12px;
+        }
+
+        .bottom-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            font-size: 8px;
+        }
+
+        .bottom-card h4 {
+            font-size: 9.5px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: var(--title-color);
+            border-bottom: 1.5px solid var(--border-color);
+            padding-bottom: 3px;
+        }
+
+        .bottom-card table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bottom-card th, .bottom-card td {
+            padding: 3px 4px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .bottom-card th {
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* Legend specific styles */
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 8px;
+        }
+
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            display: inline-block;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .encoder-table {
+            margin-top: 4px;
+        }
+
+        .note-text {
+            color: #94a3b8;
+            font-size: 7px;
+        }
+
+        /* Badges for tables */
+        .badge {
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 7.5px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', Courier, monospace;
+            background-color: #f1f5f9;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-size: 7.5px;
+        }
+
+        .desc-text {
+            color: #64748b;
+            font-size: 7.5px;
+        }
+
+        .note-cell {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .layer-section, .bottom-card {
+                box-shadow: none;
+                border: 1px solid #cbd5e1;
+            }
+            .keycap {
+                box-shadow: none;
+            }
+            .keycap:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cornix Layout Cheat Sheet</h1>
+            <div class="meta">Keyboard: Cornix (Split 42 Keys) | Vial Layout Configuration</div>
+        </header>
+
+        <div class="layers-container">
+            
+        <div class="layer-section">
+            <h3 class="layer-title">Layer 0: BASE</h3>
+            <div class="keyboard-layout">
+                <div class="keyboard-half left-half">
+                    <div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-nav"><span class="main-label">Tab</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD3</span><span class="main-label">Q</span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">W</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">E</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">R</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD7</span><span class="main-label">T</span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-modifier"><span class="sub-label">TD13</span><span class="main-label">Shift</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD0</span><span class="main-label">A</span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">S</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">D</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">F</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">G</span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-modifier"><span class="sub-label">TD12</span><span class="main-label">GUI</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD9</span><span class="main-label">Z</span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD10</span><span class="main-label">X</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD2</span><span class="main-label">C</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD1</span><span class="main-label">V</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-layer"><span class="top-sub-label">LT2</span><span class="main-label">B</span></div></div><div class="key-cell thumb-key" style="left: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-mouse"><span class="main-label">BTN1</span></div></div><div class="key-cell thumb-key" style="left: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(6deg)"><div class="keycap cat-layer"><span class="sub-label">TD14</span><span class="main-label">TO(0)</span></div></div><div class="key-cell thumb-key" style="left: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(12deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(18deg)"><div class="keycap cat-alphabet"><span class="main-label">Spc</span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+                <div class="keyboard-half right-half">
+                    <div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-nav"><span class="main-label">Esc</span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">!</span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">O</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">I</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">U</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD8</span><span class="main-label">Y</span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD11</span><span class="main-label">-</span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD5</span><span class="main-label">P</span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">L</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">K</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">J</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">H</span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD6</span><span class="main-label">?</span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">,</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-custom"><span class="combo-mark">†</span><span class="main-label">M0</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">M</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-alphabet"><span class="sub-label">TD4</span><span class="main-label">N</span></div></div><div class="key-cell thumb-key" style="right: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">Mute</span></div></div><div class="key-cell thumb-key" style="right: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(-18deg)"><div class="keycap cat-nav"><span class="main-label">BS</span></div></div><div class="key-cell thumb-key" style="right: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(-12deg)"><div class="keycap cat-nav"><span class="main-label">Ent</span></div></div><div class="key-cell thumb-key" style="right: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(-6deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="layer-section">
+            <h3 class="layer-title">Layer 1: NUMPAD</h3>
+            <div class="keyboard-layout">
+                <div class="keyboard-half left-half">
+                    <div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-nav"><span class="main-label">Tab</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-custom"><span class="combo-mark">†</span><span class="main-label">M0</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-numpad"><span class="main-label">-</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-numpad"><span class="main-label">,</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-modifier"><span class="main-label">英数</span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-modifier"><span class="sub-label">TD13</span><span class="main-label">Shift</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-numpad"><span class="main-label">+</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-numpad"><span class="combo-mark">†</span><span class="main-label">=</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">.</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-modifier"><span class="sub-label">TD12</span><span class="main-label">GUI</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">%</span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-numpad"><span class="main-label">/</span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-numpad"><span class="main-label">*</span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(6deg)"><div class="keycap cat-layer"><span class="sub-label">TD15</span><span class="main-label">TO(0)</span></div></div><div class="key-cell thumb-key" style="left: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(12deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(18deg)"><div class="keycap cat-alphabet"><span class="main-label">Spc</span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+                <div class="keyboard-half right-half">
+                    <div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">;</span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">9</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">8</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">7</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-modifier"><span class="main-label">かな</span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">6</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">5</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">4</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-function"><span class="combo-mark">†</span><span class="main-label">F10</span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-layer"><span class="main-label">RALT</span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">3</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">2</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-alphabet"><span class="combo-mark">†</span><span class="main-label">1</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-alphabet"><span class="main-label">0</span></div></div><div class="key-cell thumb-key" style="right: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="right: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(-18deg)"><div class="keycap cat-nav"><span class="main-label">BS</span></div></div><div class="key-cell thumb-key" style="right: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(-12deg)"><div class="keycap cat-nav"><span class="main-label">Ent</span></div></div><div class="key-cell thumb-key" style="right: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(-6deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="layer-section">
+            <h3 class="layer-title">Layer 2: FN</h3>
+            <div class="keyboard-layout">
+                <div class="keyboard-half left-half">
+                    <div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-custom"><span class="main-label">USER00</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-custom"><span class="main-label">USER01</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(6deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(12deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="left: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(18deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-custom"><span class="main-label">USER02</span></div></div><div class="key-cell" style="left: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="left: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+                <div class="keyboard-half right-half">
+                    <div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(0.350 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(0.160 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(0.060 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F9</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(0.000 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F8</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(0.100 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F7</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(0.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(1.430 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(1.240 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(1.140 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F6</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(1.080 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F5</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(1.180 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F4</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(1.380 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(2.320 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(2.220 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F3</span></div></div><div class="key-cell" style="right: calc(3.240 * var(--key-size)); top: calc(2.160 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F2</span></div></div><div class="key-cell" style="right: calc(4.320 * var(--key-size)); top: calc(2.260 * var(--key-size))"><div class="keycap cat-function"><span class="main-label">F1</span></div></div><div class="key-cell" style="right: calc(5.400 * var(--key-size)); top: calc(2.460 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="right: calc(6.480 * var(--key-size)); top: calc(2.510 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="right: calc(5.550 * var(--key-size)); top: calc(3.580 * var(--key-size)); transform: rotate(-18deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="right: calc(4.500 * var(--key-size)); top: calc(3.560 * var(--key-size)); transform: rotate(-12deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell thumb-key" style="right: calc(3.450 * var(--key-size)); top: calc(3.500 * var(--key-size)); transform: rotate(-6deg)"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(0.000 * var(--key-size)); top: calc(3.590 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(1.080 * var(--key-size)); top: calc(3.400 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div><div class="key-cell" style="right: calc(2.160 * var(--key-size)); top: calc(3.300 * var(--key-size))"><div class="keycap cat-transparent"><span class="main-label"></span></div></div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+
+        <div class="bottom-area">
+            <div class="bottom-card">
+                
+    <div class="legend-section">
+        <h4>凡例</h4>
+        <div class="legend-grid">
+            <div class="legend-item"><span class="legend-color cat-alphabet"></span> アルファベット/記号</div>
+            <div class="legend-item"><span class="legend-color cat-modifier"></span> 修飾キー (Shift/GUI等)</div>
+            <div class="legend-item"><span class="legend-color cat-layer"></span> レイヤー切替 (LT/TO/MO)</div>
+            <div class="legend-item"><span class="legend-color cat-nav"></span> ナビゲーション (Ent/BS/Tab)</div>
+            <div class="legend-item"><span class="legend-color cat-custom"></span> カスタム (Macro/M0)</div>
+            <div class="legend-item"><span class="legend-color cat-mouse"></span> マウス操作 (BTN)</div>
+            <div class="legend-item"><span class="legend-color cat-numpad"></span> テンキー</div>
+            <div class="legend-item"><span class="legend-color cat-function"></span> ファンクション (F1-F12)</div>
+        </div>
+        
+        <h4 style="margin-top: 12px; margin-bottom: 6px;">エンコーダー設定</h4>
+        <table class="encoder-table">
+            <thead>
+                <tr>
+                    <th>位置</th>
+                    <th>動作 (反時計 / 時計回り)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>左 (Encoder 0)</strong></td>
+                    <td>Brt- / Brt+ <span class="note-text">(Base/Num)</span><br>Vol- / Vol+ <span class="note-text">(Fn)</span></td>
+                </tr>
+                <tr>
+                    <td><strong>右 (Encoder 1)</strong></td>
+                    <td>Vol- / Vol+ <span class="note-text">(Base/Num)</span><br>WhUp / WhDn <span class="note-text">(Fn)</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+            </div>
+            
+            <div class="bottom-card">
+                
+    <div class="table-section">
+        <h4>Tap Dance 設定</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>TD</th>
+                    <th>Tap</th>
+                    <th>Hold / Double-Tap</th>
+                    <th>備考</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td><strong>TD(0)</strong></td>
+                    <td><span class="badge cat-alphabet">A</span></td>
+                    <td>Hold: ^A</td>
+                    <td class="note-cell">T=450ms</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(1)</strong></td>
+                    <td><span class="badge cat-alphabet">V</span></td>
+                    <td>Hold: ^V</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(2)</strong></td>
+                    <td><span class="badge cat-alphabet">C</span></td>
+                    <td>Hold: ^C</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(3)</strong></td>
+                    <td><span class="badge cat-alphabet">Q</span></td>
+                    <td>Hold: LAlt<br>Double-tap: @</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(4)</strong></td>
+                    <td><span class="badge cat-alphabet">N</span></td>
+                    <td>Hold: '</td>
+                    <td class="note-cell">T=350ms</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(5)</strong></td>
+                    <td><span class="badge cat-alphabet">P</span></td>
+                    <td>Hold: RShift</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(6)</strong></td>
+                    <td><span class="badge cat-alphabet">?</span></td>
+                    <td>Hold: RGUI</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(7)</strong></td>
+                    <td><span class="badge cat-alphabet">T</span></td>
+                    <td>Hold: 英数</td>
+                    <td class="note-cell">T=350ms</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(8)</strong></td>
+                    <td><span class="badge cat-alphabet">Y</span></td>
+                    <td>Hold: かな</td>
+                    <td class="note-cell">T=350ms</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(9)</strong></td>
+                    <td><span class="badge cat-alphabet">Z</span></td>
+                    <td>Hold: ^Z</td>
+                    <td class="note-cell">T=350ms</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(10)</strong></td>
+                    <td><span class="badge cat-alphabet">X</span></td>
+                    <td>Hold: ^X</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(11)</strong></td>
+                    <td><span class="badge cat-alphabet">-</span></td>
+                    <td>Hold: ~</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(12)</strong></td>
+                    <td><span class="badge cat-modifier">GUI</span></td>
+                    <td>Hold: GUI<br>Double-tap: LCTRL<br>Triple-tap: LCTRL</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(13)</strong></td>
+                    <td><span class="badge cat-modifier">Shift</span></td>
+                    <td>Hold: Shift<br>Double-tap: /</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(14)</strong></td>
+                    <td><span class="badge cat-layer">TO(0)</span></td>
+                    <td>Hold: MO(1)<br>Double-tap: TO(1)<br>Triple-tap: MO(1)</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+                <tr>
+                    <td><strong>TD(15)</strong></td>
+                    <td><span class="badge cat-layer">TO(0)</span></td>
+                    <td>Hold: MO(0)<br>Double-tap: TO(1)<br>Triple-tap: MO(0)</td>
+                    <td class="note-cell"></td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    
+            </div>
+            
+            <div class="bottom-card">
+                
+    <div class="table-section">
+        <h4>Combo 設定</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>入力キー</th>
+                    <th>結果</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr>
+            <td><span class="badge cat-alphabet">U</span> + <span class="badge cat-alphabet">I</span></td>
+            <td><span class="badge cat-alphabet">↑</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">M</span> + <span class="badge cat-custom">M0</span></td>
+            <td><span class="badge cat-alphabet">↓</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">H</span> + <span class="badge cat-alphabet">J</span></td>
+            <td><span class="badge cat-alphabet">←</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">K</span> + <span class="badge cat-alphabet">L</span></td>
+            <td><span class="badge cat-alphabet">→</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">J</span> + <span class="badge cat-alphabet">K</span></td>
+            <td><span class="badge cat-alphabet">Home</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">J</span> + <span class="badge cat-alphabet">K</span> + <span class="badge cat-alphabet">L</span></td>
+            <td><span class="badge cat-alphabet">End</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">F</span> + <span class="badge cat-alphabet">D</span></td>
+            <td><span class="badge cat-alphabet">.</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">1</span> + <span class="badge cat-alphabet">2</span></td>
+            <td><span class="badge cat-alphabet">↓</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">4</span> + <span class="badge cat-function">F10</span></td>
+            <td><span class="badge cat-alphabet">←</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">4</span> + <span class="badge cat-alphabet">5</span></td>
+            <td><span class="badge cat-alphabet">Home</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">7</span> + <span class="badge cat-alphabet">8</span></td>
+            <td><span class="badge cat-alphabet">↑</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">5</span> + <span class="badge cat-alphabet">6</span></td>
+            <td><span class="badge cat-alphabet">→</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">4</span> + <span class="badge cat-alphabet">5</span> + <span class="badge cat-alphabet">6</span></td>
+            <td><span class="badge cat-alphabet">End</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-numpad">=</span> + <span class="badge cat-alphabet">.</span></td>
+            <td><span class="badge cat-function">F2</span></td>
+        </tr>
+        
+        <tr>
+            <td><span class="badge cat-alphabet">F</span> + <span class="badge cat-alphabet">G</span></td>
+            <td><span class="badge cat-function">F7</span></td>
+        </tr>
+        
+            </tbody>
+        </table>
+    </div>
+    
+            </div>
+            
+            <div class="bottom-card">
+                
+    <div class="table-section">
+        <h4>Macro 設定</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Macro</th>
+                    <th>動作内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td><strong>M0</strong></td>
+                <td><code>"()" + ←</code> <span class="desc-text">(括弧を入力し、カーソルを中に戻す)</span></td>
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+    
+            </div>
+        </div>
+    </div>
+</body>
+</html>

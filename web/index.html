@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vial Layout Cheat Sheet (Cornix/Corne)</title>
+  <meta name="description" content="Vial対応キーボードの.vilファイルまたはWebHID接続から、美しいレイアウトチートシートを生成します。A4印刷対応。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="no-print">
+      <div class="logo">
+        <h1>Vial Layout Cheat Sheet</h1>
+        <span class="badge">Cornix Layout</span>
+      </div>
+      <p class="subtitle">Vial の設定ファイル（.vil）のドラッグ＆ドロップ、またはキーボードから<br>直接キーマップを取得し、印刷に最適化されたチートシートを表示します。</p>
+    </header>
+
+    <main>
+      <!-- コントロールエリア（印刷時は非表示） -->
+      <section class="controls-section no-print">
+        <div class="card import-card">
+          <div id="drop-zone" class="drop-zone">
+            <div class="drop-zone-content">
+              <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <h3>.vil ファイルをドラッグ＆ドロップ</h3>
+              <p>またはファイルを選択</p>
+              <input type="file" id="file-input" accept=".vil" style="display: none;">
+            </div>
+          </div>
+
+          <div class="divider">
+            <span>または</span>
+          </div>
+
+          <div class="connect-zone">
+            <button id="btn-connect" class="btn btn-primary">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                <path d="M6 12h.01"></path>
+                <path d="M10 12h.01"></path>
+                <path d="M14 12h.01"></path>
+                <path d="M18 12h.01"></path>
+              </svg>
+              キーボードから直接読み込む
+            </button>
+            <p class="compat-warning" id="browser-warning" style="display: none;">
+              ※ WebHID は現在お使いのブラウザではサポートされていません。ChromeやEdgeなどをご使用ください。
+            </p>
+          </div>
+        </div>
+
+        <div id="status-card" class="card status-card" style="display: none;">
+          <div class="status-content">
+            <span id="status-spinner" class="spinner" style="display: none;"></span>
+            <span id="status-message">準備完了</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- チートシート表示エリア（印刷対象） -->
+      <section id="sheet-section" class="sheet-section" style="display: none;">
+        <div class="sheet-header">
+          <div class="sheet-title-info">
+            <h2 id="sheet-keyboard-name">Cornix Keyboard Layout</h2>
+            <p id="sheet-meta-info" class="meta-info">Generated via Vial Web Sheet</p>
+          </div>
+          <button id="btn-print" class="btn btn-secondary no-print">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            チートシートを印刷 (PDF保存)
+          </button>
+        </div>
+
+        <!-- キーマップレイアウト表示 -->
+        <div id="layout-container" class="layout-container">
+          <!-- JSでここにレイヤーごとの物理キー配列をレンダリング -->
+        </div>
+
+        <!-- 追加情報 (Tap Dance, Combo, Macro, Encoder) -->
+        <div class="details-grid">
+          <!-- Tap Dance -->
+          <div id="section-tap-dance" class="detail-card" style="display: none;">
+            <h3>Tap Dance 設定</h3>
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tap</th>
+                  <th>Hold</th>
+                  <th>Double Tap</th>
+                  <th>Triple Tap</th>
+                  <th>Term</th>
+                </tr>
+              </thead>
+              <tbody id="table-tap-dance-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Combos -->
+          <div id="section-combos" class="detail-card" style="display: none;">
+            <h3>Combo (同時押し) 設定</h3>
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>同時押しキー</th>
+                  <th>入力キー</th>
+                </tr>
+              </thead>
+              <tbody id="table-combos-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Macros -->
+          <div id="section-macros" class="detail-card" style="display: none;">
+            <h3>Macro 設定</h3>
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>アクションマクロ内容</th>
+                </tr>
+              </thead>
+              <tbody id="table-macros-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Encoders -->
+          <div id="section-encoders" class="detail-card" style="display: none;">
+            <h3>ロータリーエンコーダー設定</h3>
+            <table class="detail-table">
+              <thead>
+                <tr>
+                  <th>レイヤー</th>
+                  <th>ENC1 左回転 (CCW)</th>
+                  <th>ENC1 右回転 (CW)</th>
+                  <th>ENC2 左回転 (CCW)</th>
+                  <th>ENC2 右回転 (CW)</th>
+                </tr>
+              </thead>
+              <tbody id="table-encoders-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="no-print">
+      <p>&copy; 2026 Vial Layout Cheat Sheet Generator | Designed with Premium Aesthetics</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
