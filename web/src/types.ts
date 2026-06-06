@@ -48,6 +48,7 @@ export interface PhysicalKeyDef {
   matrix_row: number;
   matrix_col: number;
   is_thumb?: boolean;
+  is_encoder?: boolean;
 }
 
 export const LEFT_KEYS: PhysicalKeyDef[] = [
@@ -73,7 +74,7 @@ export const LEFT_KEYS: PhysicalKeyDef[] = [
   { matrix_row: 2, matrix_col: 4 },
   { matrix_row: 2, matrix_col: 5 },
   // Mouse 1 (Encoder)
-  { matrix_row: 2, matrix_col: 6, is_thumb: true },
+  { matrix_row: 2, matrix_col: 6, is_thumb: true, is_encoder: true },
   // Thumbs
   { matrix_row: 3, matrix_col: 3, is_thumb: true },
   { matrix_row: 3, matrix_col: 4, is_thumb: true },
@@ -107,7 +108,7 @@ export const RIGHT_KEYS: PhysicalKeyDef[] = [
   { matrix_row: 6, matrix_col: 4 },
   { matrix_row: 6, matrix_col: 5 },
   // Mute (Encoder)
-  { matrix_row: 5, matrix_col: 6, is_thumb: true },
+  { matrix_row: 5, matrix_col: 6, is_thumb: true, is_encoder: true },
   // Thumbs
   { matrix_row: 7, matrix_col: 5, is_thumb: true },
   { matrix_row: 7, matrix_col: 4, is_thumb: true },

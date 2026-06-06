@@ -121,9 +121,11 @@ function renderKeycap(
 
   const classes = ['key-cell'];
   if (isThumb) classes.push('thumb-key');
+  if (keyDef.is_encoder) classes.push('encoder-cell');
 
   const keycapClasses = ['keycap', `cat-${category}`];
   if (isInherited) keycapClasses.push('inherited');
+  if (keyDef.is_encoder) keycapClasses.push('encoder-knob');
 
   let innerHTML = '';
 

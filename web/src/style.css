@@ -420,6 +420,29 @@ header h1 {
   z-index: 10;
 }
 
+/* ロータリーエンコーダー（丸形ノブ）のビジュアルスタイル */
+.keycap.encoder-knob {
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1;
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.4), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.15), 
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* つまみの位置インジケータードット */
+.keycap.encoder-knob::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  top: 5px;
+  left: 5px;
+  pointer-events: none;
+}
+
 .keycap .main-label {
   text-align: center;
   line-height: 1.1;
