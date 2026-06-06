@@ -175,6 +175,38 @@ function formatMacroAction(action: MacroAction): string {
 }
 
 /**
+ * レイヤーが完全に未設定（すべてのキーが KC_TRNS, KC_NO, -1 または空）であるか判定します。
+ */
+function isLayerEmpty(layerLayout: KeyEntry[][], layerEncoder?: KeyEntry[][]): boolean {
+  if (!layerLayout) return true;
+  for (let r = 0; r < layerLayout.length; r++) {
+    const row = layerLayout[r];
+    if (!row) continue;
+    for (let c = 0; c < row.length; c++) {
+      const entry = row[c];
+      if (entry && entry.raw !== 'KC_TRNS' && entry.raw !== 'KC_NO' && entry.raw !== '-1' && entry.raw !== '') {
+        return false;
+      }
+    }
+  }
+
+  if (layerEncoder) {
+    for (let e = 0; e < layerEncoder.length; e++) {
+      const enc = layerEncoder[e];
+      if (!enc) continue;
+      for (let dir = 0; dir < 2; dir++) {
+        const entry = enc[dir];
+        if (entry && entry.raw !== 'KC_TRNS' && entry.raw !== 'KC_NO' && entry.raw !== '') {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
  * 取得・パースされたキーボードデータをブラウザ画面に描画します。
  */
 export function renderKeyboardData(data: VialKeyboardData): void {
@@ -202,6 +234,11 @@ export function renderKeyboardData(data: VialKeyboardData): void {
     const layersToRender = Array.from({ length: layersCount }, (_, i) => i);
 
     layersToRender.forEach(lIdx => {
+      // レイヤー0以外で、中身が完全に空の場合は描画をスキップ
+      if (lIdx !== 0 && isLayerEmpty(data.layout[lIdx], data.encoderLayout[lIdx])) {
+        return;
+      }
+
       const leftKeysHTML = LEFT_KEYS.map(k => renderKeycap(lIdx, k, 'left', data.layout[lIdx], data.tapDance, comboInputKeys)).join('');
       const rightKeysHTML = RIGHT_KEYS.map(k => renderKeycap(lIdx, k, 'right', data.layout[lIdx], data.tapDance, comboInputKeys)).join('');
       const layerTitle = LAYER_NAMES[lIdx] || `Layer ${lIdx}`;
@@ -403,37 +440,44 @@ export function renderKeyboardData(data: VialKeyboardData): void {
   const encoderTableBody = document.getElementById('table-encoders-body');
   if (encoderSection && encoderTableBody) {
     encoderTableBody.innerHTML = '';
-    const numLayers = data.encoderLayout.length; // 全てのレイヤーを表示
+    const numLayers = data.encoderLayout.length;
 
-    if (data.encoderLayout.length > 0) {
-      encoderSection.style.display = 'block';
-      
-      for (let l = 0; l < numLayers; l++) {
-        // 各エンコーダーCCW, CWキーの取得と装飾
-        const e0ccw = data.encoderLayout[l][0]?.[0] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
-        const e0cw = data.encoderLayout[l][0]?.[1] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
-        const e1ccw = data.encoderLayout[l][1]?.[0] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
-        const e1cw = data.encoderLayout[l][1]?.[1] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
-
-        const formatEncCell = (entry: KeyEntry) => {
-          const parsed = parseKeycode(entry.resolved, data.tapDance);
-          const isInherited = entry.inheritedFrom !== null;
-          const inheritedClass = isInherited ? 'class="inherited-enc"' : '';
-          const inheritedBadge = isInherited ? `<span class="inherited-badge-enc">L${entry.inheritedFrom}</span>` : '';
-          
-          return `<span ${inheritedClass}>${parsed.mainLabel}</span> ${inheritedBadge}`;
-        };
-
-        encoderTableBody.insertAdjacentHTML('beforeend', `
-          <tr>
-            <td><strong>Layer ${l}</strong></td>
-            <td>${formatEncCell(e0ccw)}</td>
-            <td>${formatEncCell(e0cw)}</td>
-            <td>${formatEncCell(e1ccw)}</td>
-            <td>${formatEncCell(e1cw)}</td>
-          </tr>
-        `);
+    let hasVisibleEncoder = false;
+    for (let l = 0; l < numLayers; l++) {
+      // レイヤー0以外で、空レイヤーの場合はエンコーダー一覧からもスキップ
+      if (l !== 0 && isLayerEmpty(data.layout[l], data.encoderLayout[l])) {
+        continue;
       }
+      hasVisibleEncoder = true;
+
+      // 各エンコーダーCCW, CWキーの取得と装飾
+      const e0ccw = data.encoderLayout[l][0]?.[0] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
+      const e0cw = data.encoderLayout[l][0]?.[1] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
+      const e1ccw = data.encoderLayout[l][1]?.[0] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
+      const e1cw = data.encoderLayout[l][1]?.[1] || { raw: 'KC_NO', resolved: 'KC_NO', inheritedFrom: null };
+
+      const formatEncCell = (entry: KeyEntry) => {
+        const parsed = parseKeycode(entry.resolved, data.tapDance);
+        const isInherited = entry.inheritedFrom !== null;
+        const inheritedClass = isInherited ? 'class="inherited-enc"' : '';
+        const inheritedBadge = isInherited ? `<span class="inherited-badge-enc">L${entry.inheritedFrom}</span>` : '';
+        
+        return `<span ${inheritedClass}>${parsed.mainLabel}</span> ${inheritedBadge}`;
+      };
+
+      encoderTableBody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><strong>Layer ${l}</strong></td>
+          <td>${formatEncCell(e0ccw)}</td>
+          <td>${formatEncCell(e0cw)}</td>
+          <td>${formatEncCell(e1ccw)}</td>
+          <td>${formatEncCell(e1cw)}</td>
+        </tr>
+      `);
+    }
+
+    if (hasVisibleEncoder) {
+      encoderSection.style.display = 'block';
     } else {
       encoderSection.style.display = 'none';
     }
