@@ -46,6 +46,15 @@ function updateStatus(message: string, showSpinner = false, isError = false) {
 }
 
 /**
+ * ステータス表示を非表示にします
+ */
+function hideStatus() {
+  if (statusCard) {
+    statusCard.style.display = 'none';
+  }
+}
+
+/**
  * ファイル解析処理を実行
  */
 function handleFile(file: File) {
@@ -77,7 +86,7 @@ function handleFile(file: File) {
 
         currentKeyboardData = keyboardData;
         renderKeyboardData(keyboardData);
-        updateStatus("ファイルの読み込みに成功しました！", false);
+        hideStatus();
       } catch (err: any) {
         updateStatus(`解析エラー: ${err.message}`, false, true);
       }
@@ -160,7 +169,7 @@ if (btnConnect) {
 
       currentKeyboardData = keyboardData;
       renderKeyboardData(keyboardData);
-      updateStatus("キーボードからの読み込みに成功しました！", false);
+      hideStatus();
     } catch (err: any) {
       console.error(err);
       
