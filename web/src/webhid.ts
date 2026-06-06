@@ -75,8 +75,26 @@ async function sendCommand(device: HIDDevice, cmdData: number[]): Promise<Uint8A
   });
 }
 
+// モジュールレベルでデバイスをキャッシュし、2回目以降の接続を高速化・エラー防止する
+let cachedDevice: HIDDevice | null = null;
+
+/**
+ * キャッシュされたデバイスとキャッシュをクリアし、接続をリセットします。
+ */
+export async function disconnectKeyboard(): Promise<void> {
+  if (cachedDevice) {
+    if (cachedDevice.opened) {
+      try {
+        await cachedDevice.close();
+      } catch (_) { /* ignore */ }
+    }
+    cachedDevice = null;
+  }
+}
+
 /**
  * WebHID API を用いて対応キーボードを探索し、接続を確立します。
+ * 2回目以降はキャッシュされたデバイスをそのまま返します。
  */
 export async function connectKeyboard(): Promise<HIDDevice> {
   const nav = navigator as any;
@@ -85,6 +103,14 @@ export async function connectKeyboard(): Promise<HIDDevice> {
     err.name = "SecurityError";
     throw err;
   }
+
+  // キャッシュ済みかつ開いているデバイスがあればそのまま返す
+  if (cachedDevice && cachedDevice.opened) {
+    return cachedDevice;
+  }
+
+  // キャッシュがあるが閉じている場合はクリアして再取得
+  cachedDevice = null;
 
   let devices = await nav.hid.getDevices();
   // すでに許可されているデバイスから Cornix / Vial 互換品を探す
@@ -121,6 +147,8 @@ export async function connectKeyboard(): Promise<HIDDevice> {
     await device.open();
   }
 
+  // 成功したらキャッシュに保存
+  cachedDevice = device;
   return device;
 }
 
@@ -390,13 +418,9 @@ export async function readFromKeyboard(
     hasError = true;
     throw err;
   } finally {
-    // エラー発生時のみ、接続をクローズしてリセットする
-    if (hasError && device.opened) {
-      try {
-        await device.close();
-      } catch (closeErr) {
-        console.error("エラー後のデバイスのクローズ中にエラーが発生しました:", closeErr);
-      }
+    // エラー発生時のみ、接続をクローズしてキャッシュをクリアする（次回再接続できるようにリセット）
+    if (hasError) {
+      await disconnectKeyboard();
     }
   }
 }
